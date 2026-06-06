@@ -456,6 +456,7 @@ const SignUpComponent = () => {
             </div>
           )}
         </div>
+        </div>
       </div>
 
       <Toaster position="top-right" reverseOrder={false} />
