@@ -12,9 +12,11 @@ const LatestPostsComponent = () => {
   const [showAllPosts, setShowAllPosts] = useState(false);
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
 
-  useEffect(() => {
-    setShowAllPosts(false);
-  }, [data?.posts]);
+
+  // Remove duplicate posts based on _id
+  const uniquePosts = Array.from(
+    new Map((data?.posts ?? []).map((post) => [post._id, post])).values(),
+  );
 
   if (isLoading) return <LoadingAnimation />;
 
@@ -56,6 +58,7 @@ const LatestPostsComponent = () => {
 
     <section className="w-full min-w-0 max-w-full">
       <h2 className="mb-6 text-2xl font-bold text-slate-900 dark:text-gray-200">Latest Posts</h2>
+
       <div className="max-w-full space-y-3">
         {visiblePosts.length > 0 ? (
           visiblePosts.map((post: Post) => {
@@ -65,6 +68,7 @@ const LatestPostsComponent = () => {
               <div
                 key={post._id}
 
+
                 className="motion-card rounded-xl overflow-hidden border border-slate-200 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-900"
 
               >
@@ -73,14 +77,14 @@ const LatestPostsComponent = () => {
                   className="flex w-full min-w-0 items-center justify-between p-4 text-left font-bold text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700/20 transition-colors"
                 >
                   <span className="min-w-0 pr-4 text-lg break-words md:text-xl">{post.title}</span>
-                  <span className="shrink-0 text-slate-400 font-mono text-sm transition-transform duration-200 select-none">
+                  <span className="shrink-0 text-slate-500 dark:text-slate-400 font-mono text-sm transition-transform duration-200 select-none">
                     {isExpanded ? "▼" : "▶"}
                   </span>
                 </button>
 
                 <div
                   className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                    isExpanded ? "max-h-[500px] border-t border-slate-700/30" : "max-h-0"
+                    isExpanded ? "max-h-[500px] border-t border-slate-200 dark:border-slate-700/30" : "max-h-0"
                   }`}
                 >
                   <div className="min-w-0 p-5 bg-slate-50 dark:bg-slate-800/50">
@@ -104,7 +108,9 @@ const LatestPostsComponent = () => {
           })
         ) : (
           <div className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/20 px-4 py-5 text-slate-500 dark:text-slate-400">
+            
             Posts are not available.
+          
           </div>
         )}
       </div>
